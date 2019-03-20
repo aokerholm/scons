@@ -49,6 +49,7 @@ from . import Main
 import collections
 import os
 import os.path
+import pprint
 import re
 import sys
 import traceback
@@ -124,6 +125,9 @@ class Frame(object):
             self.sconscript = None
         else:
             self.sconscript = fs.File(str(sconscript))
+
+     def __repr__(self):
+        return os.path.join(self.prev_dir.get_abspath(), self.sconscript.name)
 
 # the SConstruct/SConscript call stack:
 call_stack = []
@@ -551,6 +555,10 @@ class SConsEnvironment(SCons.Environment.Base):
         except KeyError as x:
             raise SCons.Errors.UserError("Import of non-existent variable '%s'"%x)
 
+    def PrintCallStack(self):
+        print "Call Stack:"
+        pprint.pprint(call_stack)
+            
     def SConscript(self, *ls, **kw):
         """Execute SCons configuration files.
 
